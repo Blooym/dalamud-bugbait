@@ -11,6 +11,7 @@ export type Feedback = {
   name: string | null;
   dhash: string | null;
   version: string | null;
+  platform: string | null;
   reporter: string | null;
   exception: string | null;
 };
