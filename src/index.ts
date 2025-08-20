@@ -75,6 +75,7 @@ function getAvatarUrl(seed: string) {
 // - content (message body)
 // - name (plugin name)
 // - version (plugin version)
+// - platform (operating system)
 // - reporter (contact details)
 // - exception (C# stack trace) [optional]
 // - dhash (dalamud version hash)
@@ -121,7 +122,7 @@ async function handleRequest(request: Request, env: Env) {
     return new Response(`no body`, { status: 400 });
   }
 
-  if (!reqBody.content || !reqBody.version || !reqBody.name || !reqBody.dhash) {
+  if (!reqBody.content || !reqBody.version || !reqBody.name || !reqBody.platform || !reqBody.dhash) {
     return new Response(`no content`, { status: 400 });
   }
 
@@ -143,6 +144,7 @@ async function handleRequest(request: Request, env: Env) {
     reqBody.content,
     reqBody.name,
     reqBody.version,
+    reqBody.platform,
     reqBody.reporter,
     reporterId,
     reqBody.exception,
@@ -211,6 +213,7 @@ async function sendWebHook(
   content: string,
   name: string,
   version: string,
+  platform: string,
   reporter: string | null,
   reporterId: string | null,
   exception: string | null,
@@ -255,6 +258,11 @@ async function sendWebHook(
       {
         "name": "Dalamud Version",
         "value": dhash,
+        "inline": true
+      },
+      {
+        "name": "Platform",
+        "value": platform,
         "inline": true
       }
     ]
